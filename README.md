@@ -1,6 +1,6 @@
 # dnsv4
 
-A DNS proxy server that prioritizes IPv4 over IPv6 connections while maintaining IPv6 fallback support. This helps prevent connectivity issues in environments where IPv6 may be unreliable or slower than IPv4.
+A DNS proxy server that prioritizes IPv4 over IPv6 connections while maintaining IPv6 fallback support. This helps prevent connectivity issues in environments where IPv6 may be unreliable or slower than IPv4, or in any other situation where IPv4 is preferred.
 
 ## Purpose
 
