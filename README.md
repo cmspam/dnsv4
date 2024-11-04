@@ -25,7 +25,7 @@ This approach ensures:
 
 1. Clone the repository:
     ```bash
-    git clone https://github.com/yourusername/dnsv4
+    git clone https://github.com/cmspam/dnsv4
     cd dnsv4
     ```
 
