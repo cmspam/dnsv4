@@ -3,7 +3,6 @@ package main
 import (
     "flag"
     "fmt"
-    "net"
     "time"
 
     "github.com/miekg/dns"
@@ -14,21 +13,14 @@ var (
     listen         = flag.String("listen", "127.0.0.1:53", "Listen address")
 )
 
-type handler struct {
-    records map[string]dns.RR
-}
+type handler struct{}
 
 func (h *handler) ServeDNS(w dns.ResponseWriter, r *dns.Msg) {
     m := new(dns.Msg)
     m.SetReply(r)
 
     q := r.Question[0]
-    if rr, ok := h.records[q.Name]; ok && rr.Header().Rrtype == q.Qtype {
-        m.Answer = append(m.Answer, rr)
-        w.WriteMsg(m)
-        return
-    }
-
+    
     // For AAAA queries, check if A record exists
     if q.Qtype == dns.TypeAAAA {
         aQuery := new(dns.Msg)
@@ -48,17 +40,10 @@ func (h *handler) ServeDNS(w dns.ResponseWriter, r *dns.Msg) {
 func main() {
     flag.Parse()
 
-    records := map[string]dns.RR{
-        "example.org.": &dns.AAAA{
-            Hdr:  dns.RR_Header{Name: "example.org.", Rrtype: dns.TypeAAAA, Class: dns.ClassINET, Ttl: 60},
-            AAAA: net.ParseIP("2606:2800:220:1:248:1893:25c8:1946"),
-        },
-    }
-
     server := &dns.Server{
         Addr:    *listen,
         Net:     "udp",
-        Handler: &handler{records: records},
+        Handler: &handler{},
     }
 
     fmt.Printf("Starting DNS server on %s, proxying to %s\n", *listen, *upstreamServer)
