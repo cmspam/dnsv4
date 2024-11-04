@@ -14,7 +14,7 @@ This approach ensures:
 - Applications will try IPv4 first when both are available
 - IPv6 still works for domains that are IPv6-only
 - Better reliability in environments with problematic IPv6 connectivity
-- Avoids IPv6 timeout delays
+- IPv6 timeout delays are avoided
 
 ## Prerequisites
 
