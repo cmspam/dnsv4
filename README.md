@@ -1,14 +1,67 @@
 # dnsv4
-DNS Proxy to Prioritize IPV4
 
-This was quickly thrown together using AI chatbots.
+A DNS proxy server that prioritizes IPv4 over IPv6 connections while maintaining IPv6 fallback support. This helps prevent connectivity issues in environments where IPv6 may be unreliable or slower than IPv4.
 
-The idea is a DNS proxy which will force IPV4, but allow IPV6 if IPV4 is not available.
+## Purpose
 
-It will do the following:
+dnsv4 is designed to optimize connectivity by prioritizing IPv4 over IPv6 while still allowing IPv6 fallback. It does this by:
 
-If an A record exists, return the A record, and do not return the AAAA record.
+1. When a client requests an AAAA (IPv6) record, dnsv4 first checks if an A (IPv4) record exists
+2. If an IPv4 record exists, the AAAA query returns empty (suppressing IPv6)
+3. If no IPv4 record exists, the AAAA query proceeds normally, allowing IPv6 connectivity
 
-If an A record doesn't exist, proxy the request unmodified.
+This approach ensures:
+- Applications will try IPv4 first when both are available
+- IPv6 still works for domains that are IPv6-only
+- Better reliability in environments with problematic IPv6 connectivity
+- Faster connections by avoiding IPv6 timeout delays when IPv4 is available
 
-This way, we can ensure we only get ipv4 records if they are available.
+## Prerequisites
+
+- Go 1.18 or higher
+- `github.com/miekg/dns` package
+
+## Installation
+
+1. Clone the repository:
+    ```bash
+    git clone https://github.com/yourusername/dnsv4
+    cd dnsv4
+    ```
+
+2. Install dependencies:
+    ```bash
+    go mod init dnsv4
+    go get github.com/miekg/dns
+    ```
+
+3. Build the binary:
+    ```bash
+    go build
+    ```
+
+## Usage
+
+Run the server with default settings:
+
+```bash
+sudo ./dnsv4
+```
+
+The default configuration:
+- Listens on `127.0.0.1:53`
+- Uses Cloudflare's DNS (`1.1.1.1:53`) as upstream server
+
+### Command Line Options
+
+- `-listen`: Address and port to listen on (default: "127.0.0.1:53")
+- `-upstream`: Upstream DNS server address and port (default: "1.1.1.1:53")
+
+Example with custom settings:
+
+```bash
+sudo ./dnsv4 -listen "0.0.0.0:5353" -upstream "8.8.8.8:53"
+```
+
+Note: Running on port 53 requires root/administrator privileges
+
