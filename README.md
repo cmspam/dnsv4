@@ -4,9 +4,9 @@ A DNS proxy server that prioritizes IPv4 over IPv6 connections while maintaining
 ## Purpose
 dnsv4 is designed to optimize connectivity by prioritizing IPv4 over IPv6 while still allowing IPv6 fallback. It does this by:
 
-When a client requests an AAAA (IPv6) record, dnsv4 first checks if an A (IPv4) record exists
-If an IPv4 record exists, the AAAA query returns empty (suppressing IPv6)
-If no IPv4 record exists, the AAAA query proceeds normally, allowing IPv6 connectivity
+- When a client requests an AAAA (IPv6) record, dnsv4 first checks if an A (IPv4) record exists
+- If an IPv4 record exists, the AAAA query returns empty (suppressing IPv6)
+- If no IPv4 record exists, the AAAA query proceeds normally, allowing IPv6 connectivity
 
 This approach ensures:
 
